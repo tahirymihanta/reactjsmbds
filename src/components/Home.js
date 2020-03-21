@@ -178,8 +178,6 @@ let listAlbums = listalb.map((tile,index)=>(
    <OneAlbum allsongs={tile.songs} key={index} />
 </div> 
 ));
-
-
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
