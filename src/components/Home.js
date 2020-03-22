@@ -5,18 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import StarIcon from '@material-ui/icons/Star';
 import Avatar from '@material-ui/core/Avatar';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
-
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import PersonIcon from '@material-ui/icons/Person';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
@@ -37,11 +29,6 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: 'flex',
   },
-  rootList: {
-    width: '100%',
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
   infos:{
     paddingLeft:12,
     paddingTop:5,
@@ -59,17 +46,9 @@ const useStyles = makeStyles(theme => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
   },
-  root3: {
-    width: 500,
-    maxWidth: 500,
-    backgroundColor: '#EDEDED',
-  },
   styleMembers:{
     backgroundColor: '#EDEDED',
     marginLeft:15,
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
   },
   gridList: {
     flexWrap: 'nowrap',
@@ -79,29 +58,11 @@ const useStyles = makeStyles(theme => ({
   title: {
     color: theme.palette.primary.light,
   },
-  titleBar: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
   content: {
     flex: '1 0 auto',
   },
   cover: {
     width: 200,
-  },
-  controls: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  playIcon: {
-    height: 38,
-    width: 38,
   },
   paper: {
     padding: theme.spacing(2),
@@ -126,32 +87,33 @@ const useStyles = makeStyles(theme => ({
     maxWidth: '100%',
     maxHeight: '100%',
   },
- espace:{
-  paddingTop:40,
- },
- rootMember: {
-  flexGrow: 1,
-  overflow: 'hidden',
-  padding: theme.spacing(0, 3),
-},
-paperMember: {
-  maxWidth: 400,
-  margin: `${theme.spacing(1)}px auto`,
-  padding: theme.spacing(2),
-},
+  espace:{
+    paddingTop:40,
+  },
+  rootMember: {
+    flexGrow: 1,
+    overflow: 'hidden',
+    padding: theme.spacing(0, 3),
+  },
+  paperMember: {
+    maxWidth: 400,
+    margin: `${theme.spacing(1)}px auto`,
+    padding: theme.spacing(2),
+  },
 }));
 
 
-export default function ComplexGrid() {
+export default function Home() {
   const classes = useStyles();
 
+  // recupérer l'initial d'un nom
   const getInitial = (name) => {
     return (name.substr(0, 1));
   };
 
+  // afficher les membres
     let listMembers = metallica.members.map((m, index)=>(
       <div className={classes.rootMember}>
-      
       <Paper className={classes.paperMember}>
         <Grid container wrap="nowrap" spacing={2}>
           <Grid item>
@@ -168,47 +130,54 @@ export default function ComplexGrid() {
     </div>
     ));
 
+  // afficher les subjects
   let listSubject = metallica.subject.map((m)=>(
     <div>
      <Typography align="left" className={classes.subject} variant="subtitle1"> <LibraryMusicIcon/>&nbsp;{m}</Typography>
      </div>
   ));
 
-let listSubject2 = metallica.albums[12].songs.map((m,index)=>(
-    <div>
-     <Typography align="left" className={classes.subject} variant="subtitle1"> {index+1}. {m.title}</Typography>
-     </div>
+  // afficher la liste des chansons de l'album N°13
+  let othersSongs = metallica.albums[12].songs.map((m,index)=>(
+      <div>
+      <Typography align="left" className={classes.subject} variant="subtitle1"> {index+1}. {m.title}</Typography>
+      </div>
+    ));
+
+  // récupérer les albums
+  let tileData = metallica.albums;
+
+  // filtrer la liste avec image
+  let listalb = [];
+  for (var index = 0; tileData[index]; index++) {
+    if(index!==12){
+      listalb.push(tileData[index]);
+    }
+  }
+  // afficher la liste des albums + chansons par albums
+  let listAlbums = listalb.map((tile,index)=>(
+    <div key={index}>
+    <h3>{tile.title}</h3>
+    <GridListTile className={classes.gridImg}>
+      <img src={tile.cover.big} className={classes.imagealb} />
+    </GridListTile>
+    <div className={classes.infos}>
+      <Typography align="left"className={classes.infosP}>Length : {tile.length}</Typography>
+      <Typography align="left"className={classes.infosP}>Country : {tile.country}</Typography>
+      <Typography align="left"className={classes.infosP}>Language : {tile.language}</Typography>
+      <Typography align="left"className={classes.infosP}>Date release : {tile.publicationDate}</Typography>
+      <Typography align="left"className={classes.infosP}>Songs: </Typography>
+    </div>
+    <OneAlbum allsongs={tile.songs} key={index} />
+  </div> 
   ));
+
+  // afficher les informations de Metallica
   let location = metallica.locationInfo.reduce((acc, curr) => `${acc}${curr}, ` ,' ')
   let genres = metallica.genres.reduce((acc, curr) => `${acc}${curr} -` ,' ')
   let labels = metallica.labels.reduce((acc, curr) => `${acc}${curr}, ` ,' ')
   let associated = metallica.associatedMusicalArtist.reduce((acc, curr) => `${acc}${curr}, ` ,' ')
   
-let tileData = metallica.albums;
-
-let listalb = [];
-for (var index = 0; tileData[index]; index++) {
-  if(index!==12){
-    listalb.push(tileData[index]);
-  }
-}
-
-let listAlbums = listalb.map((tile,index)=>(
-  <div key={index}>
-  <h3>{tile.title}</h3>
-  <GridListTile className={classes.gridImg}>
-    <img src={tile.cover.big} className={classes.imagealb} />
-  </GridListTile>
-  <div className={classes.infos}>
-    <Typography align="left"className={classes.infosP}>Length : {tile.length}</Typography>
-    <Typography align="left"className={classes.infosP}>Country : {tile.country}</Typography>
-    <Typography align="left"className={classes.infosP}>Language : {tile.language}</Typography>
-    <Typography align="left"className={classes.infosP}>Date release : {tile.publicationDate}</Typography>
-    <Typography align="left"className={classes.infosP}>Songs: </Typography>
-  </div>
-   <OneAlbum allsongs={tile.songs} key={index} />
-</div> 
-));
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -259,7 +228,7 @@ let listAlbums = listalb.map((tile,index)=>(
                   </Grid>
                   <Grid item >
                   <Typography align="left">Others songs : </Typography>
-                      {listSubject2}
+                      {othersSongs}
                   </Grid>
               </Grid>
               </Grid>
@@ -272,9 +241,8 @@ let listAlbums = listalb.map((tile,index)=>(
           </GridList>
         </div>
         <br/>
-        <Typography>Projet ReactJS - par Tahiry Mihanta FALIHARIMALALA (MBDS Madagascar)</Typography>
- 
-      </Paper>
+        <Typography>Mini Projet ReactJS - par Tahiry Mihanta FALIHARIMALALA (MBDS Madagascar)</Typography>
+    </Paper>
     </div>
   );
 }

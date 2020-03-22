@@ -41,8 +41,6 @@ function App() {
             </AppBar>
             <br/><br/>
           </div>
-        
-        {/*<Route path="/MetallicaPage" component={MetallicaPage} />*/}
         <Route path="/" component={Home} />
       </BrowserRouter>
     </div>

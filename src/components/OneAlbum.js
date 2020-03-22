@@ -1,12 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import Card from '@material-ui/core/Card';
-
 import CardContent from '@material-ui/core/CardContent';
-
 import { FixedSizeList } from 'react-window';
-
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
   media: {
     height: 0,
-    paddingTop: '56.25%', // 16:9
+    paddingTop: '56.25%', 
   }
 }));
 
@@ -34,6 +30,7 @@ function Songs(songs)  {
          {index+1} - {songs[index]}
       </div>
     );
+
   return (
       <FixedSizeList
           height={150}
@@ -41,8 +38,8 @@ function Songs(songs)  {
           itemSize={25}
           itemCount={songs.length}
       >
-  {row}
-</FixedSizeList>
+        {row}
+      </FixedSizeList>
     );
 };
 
