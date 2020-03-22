@@ -271,7 +271,9 @@ let listAlbums = listalb.map((tile,index)=>(
             {listAlbums}
           </GridList>
         </div>
-        
+        <br/>
+        <Typography>Projet ReactJS - par Tahiry Mihanta FALIHARIMALALA (MBDS Madagascar)</Typography>
+ 
       </Paper>
     </div>
   );
