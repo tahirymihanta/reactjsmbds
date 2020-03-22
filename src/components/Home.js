@@ -9,22 +9,21 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
+import Avatar from '@material-ui/core/Avatar';
+import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
+
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import PersonIcon from '@material-ui/icons/Person';
+import QueueMusicIcon from '@material-ui/icons/QueueMusic';
+import CakeIcon from '@material-ui/icons/Cake';
+import GroupIcon from '@material-ui/icons/Group';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 // importer les données dans metallica.js
 import metallica from "../data/mettalica";
@@ -38,6 +37,21 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     display: 'flex',
   },
+  rootList: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  infos:{
+    paddingLeft:12,
+    paddingTop:5,
+  },
+  infosP:{
+    fontSize:15,
+  },
+  abstracts:{
+    fontSize:14,
+  },
   root2: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -50,12 +64,16 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 500,
     backgroundColor: '#EDEDED',
   },
+  styleMembers:{
+    backgroundColor: '#EDEDED',
+    marginLeft:15,
+  },
   nested: {
     paddingLeft: theme.spacing(4),
   },
   gridList: {
     flexWrap: 'nowrap',
-    height: 600 ,
+    height: 700 ,
     transform: 'translateZ(0)',
   },
   title: {
@@ -88,7 +106,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: theme.spacing(2),
     margin: 'auto',
-    maxWidth: 1175,
+    maxWidth: 1200,
   },
   imagealb:{
     width: 300,
@@ -111,49 +129,56 @@ const useStyles = makeStyles(theme => ({
  espace:{
   paddingTop:40,
  },
+ rootMember: {
+  flexGrow: 1,
+  overflow: 'hidden',
+  padding: theme.spacing(0, 3),
+},
+paperMember: {
+  maxWidth: 400,
+  margin: `${theme.spacing(1)}px auto`,
+  padding: theme.spacing(2),
+},
 }));
 
 
 export default function ComplexGrid() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
 
-  const handleClick = () => {
-    setOpen(!open);
+  const getInitial = (name) => {
+    return (name.substr(0, 1));
   };
 
-  let listeDesMembres = metallica.members.map((m, index) => (
-    <Membres membre={m} key={index} />
-  ));
+    let listMembers = metallica.members.map((m, index)=>(
+      <div className={classes.rootMember}>
+      
+      <Paper className={classes.paperMember}>
+        <Grid container wrap="nowrap" spacing={2}>
+          <Grid item>
+            <Avatar>{getInitial(m.name)}</Avatar>
+          </Grid>
+          <Grid item xs>
+            <Typography align="left" variant="h6">{m.name}</Typography>
+            <Typography align="left" className={classes.abstracts}>Birthday : {m.birthDate}</Typography>
+            <Typography align="left" className={classes.abstracts}>Gender : {m.gender}</Typography>
+            <Typography align="left" className={classes.abstracts}>Begin and end : {m.begin} - {m.end}</Typography>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
+    ));
 
-  let listeMembre = metallica.members.map((m, index) => (
+  let listSubject = metallica.subject.map((m)=>(
     <div>
-    <ListItem button onClick={handleClick}>
-    <ListItemIcon>
-      <InboxIcon />
-    </ListItemIcon>
-    <ListItemText primary={m.name} />
-    {open ? <ExpandLess /> : <ExpandMore />}
-  </ListItem>
-   <Collapse in={open} timeout="auto" unmountOnExit>
-   <List component="div" disablePadding>
-     <ListItem button className={classes.nested}>
-       <ListItemIcon>
-         <StarBorder />
-       </ListItemIcon>
-       <ListItemText primary="Starred" />
-     </ListItem>
-     <ListItem button className={classes.nested}>
-       <ListItemIcon>
-         <StarBorder />
-       </ListItemIcon>
-       <ListItemText primary="Autres" />
-     </ListItem>
-   </List>
- </Collapse>
- </div>
+     <Typography align="left" className={classes.subject} variant="subtitle1"> <LibraryMusicIcon/>&nbsp;{m}</Typography>
+     </div>
   ));
 
+let listSubject2 = metallica.albums[12].songs.map((m,index)=>(
+    <div>
+     <Typography align="left" className={classes.subject} variant="subtitle1"> {index+1}. {m.title}</Typography>
+     </div>
+  ));
   let location = metallica.locationInfo.reduce((acc, curr) => `${acc}${curr}, ` ,' ')
   let genres = metallica.genres.reduce((acc, curr) => `${acc}${curr} -` ,' ')
   let labels = metallica.labels.reduce((acc, curr) => `${acc}${curr}, ` ,' ')
@@ -174,7 +199,13 @@ let listAlbums = listalb.map((tile,index)=>(
   <GridListTile className={classes.gridImg}>
     <img src={tile.cover.big} className={classes.imagealb} />
   </GridListTile>
- 
+  <div className={classes.infos}>
+    <Typography align="left"className={classes.infosP}>Length : {tile.length}</Typography>
+    <Typography align="left"className={classes.infosP}>Country : {tile.country}</Typography>
+    <Typography align="left"className={classes.infosP}>Language : {tile.language}</Typography>
+    <Typography align="left"className={classes.infosP}>Date release : {tile.publicationDate}</Typography>
+    <Typography align="left"className={classes.infosP}>Songs: </Typography>
+  </div>
    <OneAlbum allsongs={tile.songs} key={index} />
 </div> 
 ));
@@ -190,16 +221,13 @@ let listAlbums = listalb.map((tile,index)=>(
           <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
-                <Typography align="left" variant="h3">
-                 {metallica.name}
-                </Typography>
                 <Typography align="left" variant="subtitle1">
-                 <p> Birthday :  {metallica.lifeSpan.begin}</p>
-                 <p> Location : {location}</p>
-                 <p> Genre : {genres}</p>
-                 <p> labels : {labels}</p>
-                 <p> Number of Deezer fans : {metallica.deezerFans}</p>
-                 <p> Associated artist(s) : {associated}</p>
+                 <p> <CakeIcon/> Birthday :  {metallica.lifeSpan.begin}</p>
+                 <p> <LocationOnIcon/> Location : {location}</p>
+                 <p> <PersonIcon/> Genre : {genres}</p>
+                 <p> <QueueMusicIcon/> Labels : {labels}</p>
+                 <p> <EqualizerIcon/> Number of Deezer fans : {metallica.deezerFans}</p>
+                 <p> <AssignmentIndIcon/> Associated artist(s) : {associated}</p>
                  <a href= {metallica.urlYouTube}><img className={classes.imageSocial} alt="YouTube" src={require('../data/youtube.png')}/></a>&nbsp;
                  <a href= {metallica.urlITunes}><img className={classes.imageSocial} alt="iTunes" src={require('../data/itunes.png')}/></a>&nbsp;
                  <a href= {metallica.urlSoundCloud}><img className={classes.imageSocial} alt="SoundCloud" src={require('../data/soundcloud.png')}/></a>&nbsp;
@@ -213,22 +241,27 @@ let listAlbums = listalb.map((tile,index)=>(
           </Grid>
         </Grid>
         <div className={classes.espace}></div>
-        <Grid container spacing={2}>
-          <Grid item>
-            <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                className={classes.root3}
-              >
-               {listeMembre}
-            </List>
+        <Grid container spacing={4}>
+          <Grid item className={classes.styleMembers}>
+          {listMembers}
           </Grid>
-          <Grid item xs={8} sm container>
+          <Grid item xs={12} sm container>
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
-              <Typography align="justify">
+              <Typography align="justify" className={classes.abstracts}>
                 {metallica.abstract}
               </Typography>
+              <br/>
+              <Grid container spacing={5}>
+                  <Grid item>
+                      <Typography align="left">Subjects : </Typography>
+                      {listSubject}
+                  </Grid>
+                  <Grid item >
+                  <Typography align="left">Others songs : </Typography>
+                      {listSubject2}
+                  </Grid>
+              </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -239,20 +272,6 @@ let listAlbums = listalb.map((tile,index)=>(
           </GridList>
         </div>
         
-        {/*<OneAlbum album={tile}/>*/}
-          <h1>Membres </h1>
-          <TableContainer component={Paper}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Informations</TableCell>
-                    <TableCell>abstract</TableCell>
-                    <TableCell>dbp_abstract</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>{listeDesMembres}</TableBody>
-              </Table>
-        </TableContainer>
       </Paper>
     </div>
   );
